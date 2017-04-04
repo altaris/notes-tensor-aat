@@ -1,0 +1,396 @@
+\documentclass[a4paper, 12pt]{article}
+
+\usepackage[cortana,
+			langage = english,
+			chapterStyle = cb,
+			scriptStyle = rsfs,
+			+maths,
+			maths.scriptCategories,
+			+tikz]{kappak}
+\usepackage{bbm, mathtools, stmaryrd}
+
+\diagramsize{2}{3}
+
+\newcommand{\theory}{\mathtt}
+
+\title{Notes on the Tensor Product of Axiomatized Algebraic Theories and their Stability}
+\author{Cédric HT}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+\section{The category of an algebraic theory}
+
+\subsection{Construction}
+
+Let $\frakLL$ be a first order langage, and denote by $c\frakLL = f^{(0)} \frakLL$ the set of its constant symbols, $f^{(n)} \frakLL$ the set of its function symbols of arity $n$, $f \frakLL = \bigcup_{n \in \bbNN} f^{(n)} \frakLL$, and define $t^{(n)} \frakLL$, $t \frakLL$ similarity for terms.
+
+An \emph{identity} is a formula $\phi$ of $\frakLL$ of the following form
+\[ \phi = \quad [\forall \overrightarrow{x_i} \;\; t(\overrightarrow{x_i}) = u(\overrightarrow{x_i})] , \]
+which we'll more compactly denote $\phi = [t = u]$, where $t, u \in t \frakLL$. An \emph{algebraic theory} is a pair $\theory{T} = (\frakLL, T)$, where $T$ is a theory only containing identities. We will use the notations $f^{(n)} \theory{T}$ instead of $f^{(n)} \frakLL$, and similarity for terms.
+
+We now create a category that describe $\theory{T}$. The first step is to describe its langage $\frakLL$. Consider $\bbNN$ the category of finite cardinals and set maps. Then the usual addition $+$ is a product in the opposite category $\bbNN^\op$. Endow it with an additional morphism $f : n \longrightarrow 1$ for each function symbol $f \in f^{(n)} \theory{T}$ and complete it so as it still has finite products. Denote by $\catLL$ the resulting category.
+
+Each term $t \in t^{(n)} \theory{T}$ defines a morphism $t : n \longrightarrow 1$. Define $\sim$ to be the smallest congruence relation on $\frakLL$ such that $t = u$ in $\catLL / \sim$ whenever there is an axiom $\phi \in T$ of the form $\phi = [t = u]$. We abuse notations and denote by $\theory{T}$ the quotient category.
+
+Let $\catAA$ be the category of algebraic theories and finite product preserving functors that are identity on objects, i.e. a morphism $F : \theory{T} \longrightarrow \theory{U}$ is a product preserving functor such that the follwing diagram commutes : \trianglediagramarrows{c->}{c->}{}
+\[ \triangleUdiagram{\bbNN^\op}{\theory{T}}{\theory{U} .}{}{}{F} \]
+
+\subsection{Structure of $\theory{T} ( \catCC )$}
+
+Take $\catCC$ a category with finite product, and define a \emph{$\theory{T}$-model} in $\catCC$ to be a product preserving functor $X : \theory{T} \stackrel{\x}{\longrightarrow} \catCC$. We abuse notations further and denote $X = X1 \in \ob \catCC$, $f = Xf : X^n \longrightarrow X$ for all $f \in f^{(n)} \theory{T}$. Take $Y$ another model, and $\alpha : X \longrightarrow Y$ is a natural transformation. Remark that $\alpha_n = \alpha_1^n : X^n \longrightarrow Y^n$. Hence, we identify $\alpha$ with $\alpha_1$. Denote by $\theory{T} (\catCC)$ to be the category of such models and natural transformations. If $\catCC = \Set$, denote $\underline{\theory{T}} = \theory{T} (\Set)$.
+
+Take $X, Y : \catLL \stackrel{\x}{\longrightarrow} \catCC$, and define
+\begin{align*}
+	X \x Y : \catLL &\longrightarrow \catCC \\
+	n &\longmapsto (X \x Y)^n \\
+	f &\longmapsto (X \x Y) f, & \forall f \in f^{(n)} \theory{T}
+\end{align*}
+where $(X \x Y) f$ is the following composite :
+\[ (X \x Y)^n \xrightarrow{\tau_{2, n}} X^n \x Y^n
+              \xrightarrow{f \x f} X \x Y . \]
+
+\begin{proposition}
+	\begin{enumerate}
+		\item This operation defines a product on the category of finite product preserving functors $\catLL \stackrel{\x}{\longrightarrow} \catCC$.
+		\item If $X, Y \in \ob \theory{T} (\catCC)$, then so does $X \x Y$. Hence, $\theory{T} (\catCC)$ is a category with finite products.
+	\end{enumerate}
+\end{proposition}
+\begin{proof}
+	Define $(\proj_X)_n$ as being the composite
+	\[ (X \x Y)^n \xrightarrow{\tau_{2, n}} X^n \x Y^n \xrightarrow{\proj} X^n . \]
+	If $f \in f^{(n)} \theory{T}$, then the following diagram commutes by definition : \diagramsize{2}{5}
+	\[ \squarediagram{(X \x Y)^n}{X^n \x Y^n}{X \x Y}{X \x Y.}{\tau_{2, n}}{(X \x Y) f}{f \x f}{\tau_{1, 1} = \id} \]
+	Take $w : p \longrightarrow q$ be a morphism in $\catLL$, and consider \diagramsize{2}{3}
+	\[ \begin{tikzpicture}[inline/.style = {fill = white, inner sep = 2.5pt}]
+		\matrix (m) [matrix of math nodes,
+					 row sep = 2em,
+					 column sep = 3em,
+					 text height = 1.5ex,
+					 text depth = 0.25ex] {
+			(X \x Y)^p & X^p \x Y^p & X^p   \\
+			(X \x Y)^q & X^q \x Y^q & X^q . \\
+		};
+		\path[-stealth]
+			(m-1-1) edge node [above] {$\tau_{2, p}$} (m-1-2)
+			(m-1-2) edge node [above] {$\proj$}       (m-1-3)
+			(m-1-1) edge node [left ] {$(X \x Y)w$}   (m-2-1)
+			(m-1-2) edge node [left ] {$w \x w$}      (m-2-2)
+			(m-1-3) edge node [right] {$w$}           (m-2-3)
+			(m-2-1) edge node [below] {$\tau_{2, p}$} (m-2-2)
+			(m-2-2) edge node [below] {$\proj$}       (m-2-3);
+	\end{tikzpicture} \]
+	The left square commutes by the previous remark whereas the right square commutes by the definition of the product in $\catCC$. Therefore, the outer square commutes, and we can define a natural transformation $\proj_X = (\proj_X)_\bullet : X \x Y \longrightarrow X$, and similarily for $Y$.
+
+	Take $Z : \catLL \stackrel{\x}{\longrightarrow} \catCC$ and two natural transformations $X \stackrel{\alpha}{\longleftarrow} Z \stackrel{\beta}{\longrightarrow} Y$. Using the same argument as before, we obtain a well defined natural transformation $\gamma : Z \longrightarrow X \x Y$ having components $\tau_{n, 2} \langle \alpha^n, \beta^n \rangle : Z \longrightarrow (X \x Y)^n$, where $\langle \alpha^n, \beta^n \rangle$ is the morphism induced by the universal property of the product. Clearly, the flowing diagram commutes
+	\[ \begin{tikzpicture}[inline/.style = {fill = white, inner sep = 2.5pt}]
+		\matrix (m) [matrix of math nodes,
+					 row sep = 2em,
+					 column sep = 5em,
+					 text height = 1.5ex,
+					 text depth = 0.25ex] {
+			  & X      \\
+			Z & X \x Y \\
+			  & Y .    \\
+		};
+		\path[-stealth]
+			(m-2-1) edge node [above ] {$\alpha$}  (m-1-2)
+			(m-2-2) edge node [right ] {$\proj_X$} (m-1-2)
+			(m-2-1) edge node [inline] {$\gamma$}  (m-2-2)
+			(m-2-2) edge node [right ] {$\proj_Y$} (m-3-2)
+			(m-2-1) edge node [below ] {$\beta$}   (m-3-2);
+	\end{tikzpicture} \]
+	Showing that $\gamma$ is unique with this property is routine verification. From the definition of $(X \x Y) f$, for $f$ a function symbol, one can show that if $X$ and $Y$ factor through $\theory{T}$, then so does $X \x Y$. The terminal object of $\theory{T} (\catCC)$ is given by the composite $\catLL \stackrel{!}{\longrightarrow} \star \stackrel{!}{\longrightarrow} \catCC$, where $\star$ is the terminal category endowed with the trivial (and only possible) product.
+\end{proof}
+
+\subsection{Functoriality}
+
+Take $\theory{T} \in \ob \catAA$, and a finite product preserving functor $F : \catCC \longrightarrow \catDD$, where $\catCC$ and $\catDD$ have finite products. Define
+\begin{align*}
+    \theory{T} (F) : \theory{T} (\catCC) &\longrightarrow \theory{T} (\catDD) \\
+    X &\longmapsto FX \\
+    (X \stackrel{m}{\longrightarrow} Y) &\longmapsto (FX \xrightarrow{\id_F * m} FY) ,
+\end{align*}
+where $*$ stands for the Godment product. It is routine verification to show that $\theory{T} (F)$ preserve products, and hence $\theory{T}$ induces a functor
+\[ \theory{T} (-) : \Cat_\x \longrightarrow \Cat_\x , \]
+where $\Cat_\x$ is the (meta)category of categories with finite product. Let $\alpha : F \longrightarrow G$ be a natural transformation, and define $\theory{T} (\alpha)_X = \alpha * \id_X : FX \longrightarrow GX$. If $m : X \longrightarrow Y$ is a morphism, then the following diagram commutes : \diagramsize{2}{8}
+\[ \squarediagram{FX}{GX}{FY}{GY ,}{\theory{T} (\alpha)_X = \alpha * \id_X}{\theory{T} (F) m = \id_F * m}{\theory{T} (G) m = \id_G * m}{\theory{T} (\alpha)_Y = \alpha * \id_Y} \] \diagramsize{2}{3}
+making $\theory{T} (\alpha) : \theory{T} (F) \longrightarrow \theory{T} (G)$ a natural transformation. Moreover, composition of natural transformations is preserved under this operation. Finally, we obtain that $\theory{T} (-)$ is a 2-functor.
+
+\section{Tensor product}
+
+\subsection{Categorical motivation}
+
+Take $n, m \in \bbNN$ two integers, and define the \emph{shuffle operation} $\tau_{n, m} \in \frakSS_{nm}$ to be such that $\tau_{n, m} ((i - 1) m + j) = (j - 1) n + i$, for $1 \leq i \leq n$ and $1 \leq j \leq m$. In other word, it ``rearranges $m$ tuples of $n$ elements each into $n$ tuples of $m$ elements each''.
+
+Take $\theory{T} \in \ob \catAA$, and $f \in f^{(n)} \theory{T}$, $g \in f^{(m)} \theory{T}$ two function symbols. We say that \emph{$f$ distributes over $g$} if
+\[ f \boxtimes g := \quad [f g^n = g f^m \tau_{m, n}] \]
+is true in $T_\theory{T}$.
+
+Take another $\theory{U} \in \ob \catAA$ and define the \emph{tensor product} of $\theory{T}$ and $\theory{U}$, denoted by $\theory{T} \ox \theory{U}$, to be
+\begin{itemize}
+	\item $f^{(n)} (\theory{T} \ox \theory{U}) = f^{(n)} \theory{T} \cup f^{(n)} \theory{U}$, where we implicitely distinguish symbols from $\theory{T}$ and $\theory{U}$ ;
+	\item $T_{\theory{T} \ox \theory{U}} = T_\theory{T} \cup T_\theory{U} \cup \{ f \boxtimes g \mid f \in f \theory{T}, g \in f \theory{U} \}$.
+\end{itemize}
+Remark that $f \boxtimes g \iff g \boxtimes f$. Hence $\ox$ is an associative and commutative operation. It can moreover be seen as functorial in each variable.
+
+\begin{theorem}
+	There is a finite product preserving isomorphism of categories $\theory{U} (\theory{T} (\catCC)) \cong (\theory{U} \ox \theory{T}) (\catCC)$.
+\end{theorem}
+\begin{proof}
+	Take $X \in \ob \theory{U} (\theory{T} (\catCC))$ and define
+	\begin{align*}
+		\chXX : \theory{U} \ox \theory{T} &\longrightarrow \catCC \\
+		n &\longmapsto (X1)n \\
+		f &\longmapsto (Xf)_1 & \forall f \in f \theory{U} \\
+		g &\longmapsto (X1) g & \forall g \in f \theory{T} .
+	\end{align*}
+	Define the so called \emph{deflation functor} :
+	\begin{align*}
+		\check{(-)} : \theory{U} (\theory{T} (\catCC)) &\longrightarrow \theory{U} \ox \theory{T} (\catCC) \\
+		X &\longmapsto \chXX \\
+		(X \stackrel{\alpha}{\longrightarrow} X') &\longmapsto (\chXX \stackrel{\alpha_1}{\longrightarrow} \chXX') .
+	\end{align*}
+
+	Conversely, take $Y \in \ob \theory{U} \ox \theory{T} (\catCC)$. Define
+	\begin{align*}
+		\hatYY : \theory{U} &\longrightarrow \theory{T} (\catCC) \\
+		n &\longmapsto Y^n \iota \\
+		f &\longmapsto (Yf)^\bullet & \forall f \in f \theory{U} ,
+	\end{align*}
+	Where $\iota$ is the canonical functor $\theory{T} \longrightarrow \theory{U} \ox \theory{T}$, and $(Yf)^\bullet$ is the natural transformation with components $(Yf)^n$. Define the so called \emph{inflation functor} :
+	\begin{align*}
+		\hat{(-)} : \theory{U} \ox \theory{T} (\catCC) &\longrightarrow \theory{U} (\theory{T} (\catCC)) \\
+		Y &\longmapsto \hatYY \\
+		(Y \stackrel{\beta}{\longrightarrow} Y') &\longmapsto (\hatYY \stackrel{\beta^\bullet}{\longrightarrow} \hatYY') .
+	\end{align*}
+
+	Then one can check that $\check{(-)}$ and $\hat{(-)}$ are indeed finite product preserving and mutually inverse.
+\end{proof}
+
+\begin{corollary}
+	There is a natural isomorphism $\theory{U} (\theory{T} (-)) \cong \theory{T} (\theory{U} (-))$.
+\end{corollary}
+
+\subsection{Stability}
+
+Take $\theory{T} \in \ob \catAA$, denote by $\eta_k : \theory{T}^{\ox k} \longrightarrow \theory{T}^{\ox k+1}$ the canonical morphism, and $U_k = \eta_k^* : \underline{\theory{T}^{\ox k}} \longrightarrow \underline{\theory{T}^{\ox k+1}}$ the forgetful functor.
+
+The theory $\theory{T}$ is said \emph{syntactically stable} at $k \in \bbNN$ if $\eta_k$ is an isomorphism. It is said \emph{semantically stable} at $k$ if $U_k$ is an equivalence of categories.
+
+\begin{proposition}
+    If $\theory{T}$ is syntactically (resp. semantically) stable at $k$, then it remains so at $k + 1$.
+\end{proposition}
+\begin{proof}
+    Remark that the following diagram commute : \squarediagramlines{}{=}{=}{} \squarediagramarrows{}{-}{-}{}
+    \[ \squarediagram{\theory{T}^{\ox k+1}}{\theory{T}^{\ox k+2}}{\theory{T} \ox \theory{T}^{\ox k}}{\theory{T} \ox \theory{T}^{\ox k+1} ,}{\eta_{k+1}}{}{}{\theory{T} \ox \eta_k} 
+    \qquad
+    \begin{tikzpicture}[inline/.style = {fill = white, inner sep = 2.5pt}]
+        		\matrix (m) [matrix of math nodes,
+        					 row sep = 2em,
+        					 column sep = 5em,
+        					 text height = 1.5ex,
+        					 text depth = 0.25ex] {
+        			\underline{\theory{T}^{\ox k+2}} &
+        			    \underline{\theory{T}^{\ox k+1}} \\
+        			\underline{\theory{T} \ox \theory{T}^{\ox k+1}} &
+        			    \underline{\theory{T} \ox \theory{T}^{\ox k}} \\
+        			\theory{T} (\underline{\theory{T}^{\ox k+1}}) &
+        			    \theory{T} (\underline{\theory{T}^{\ox k}}) . \\
+        		};
+        		\path
+        		    (m-2-1) edge [double] (m-1-1)
+        			(m-2-2) edge [double] (m-1-2);
+        		\path[-stealth]
+        			(m-1-1) edge node [above] {$U_{k+1}$} (m-1-2)
+        			(m-2-1) edge node [above] {$(\theory{T} \ox \eta_k)^*$} (m-2-2)
+        			(m-3-1) edge node [left ] {$(\check{-})$} (m-2-1)
+        			(m-3-2) edge node [right] {$(\check{-})$} (m-2-2)
+        			(m-3-1) edge node [above] {$\theory{T} (U_k)$} (m-3-2);
+        	\end{tikzpicture}
+    \]
+    Hence, $\eta_{k+1}$ (resp. $U_{k+1}$) is an isomorphism (resp. equivalence of categories) whenever $\eta_k$ (resp. $U_k$) is.
+\end{proof}
+
+Define $\Vert \theory{T} \Vert$ to be the smallest $k$ such that $\theory{T}$ is syntactically stable at $k$, or $\infty$ if stability never occurs. Define $\vert \theory{T} \vert$ similarly for semantics. Clearly, if it is syntactically stable, then it is semantically stable at the same $k$, and hence $\vert \theory{T} \vert \geq \Vert \theory{T} \Vert$.
+
+\section{The $\epsilon_1$ ring}
+
+Take $\theory{T}, \theory{U} \in \ob \catAA$, and consider $\theory{T} \ox \theory{U}$. Then every function symbol of $\theory{T}$ distributes over every function symbol of $\theory{U}$, which we shall conveniently denote by $f \theory{T} \boxtimes f \theory{U}$.
+
+\begin{proposition}
+    $t \theory{T} \boxtimes t \theory{U}$.
+\end{proposition}
+\begin{proof}
+    \begin{itemize}
+        \item We first show that $f \theory{T} \boxtimes t \theory{U}$. Take $f \in f^{(n)} \theory{T}$ and $u \in t \theory{U}$. If $u$ is a function symbol, then $f \boxtimes u$ by hypothesis. If $u : \dom u \longrightarrow 1$ is a projection, then a short computation shows that the result also hold. Proceed now by induction on the height of $u$, and write $u = g ( \overrightarrow{u_i} )$, where $g \in f^{(m)} \theory{U}$, $u_i \in t \theory{U}$. Then by induction hypothesis, $f \boxtimes u_i$, and
+            \begin{align*}
+                f u^n &= f g^n \left( \prod_i u_i \right)^n
+                 = g f^m \tau_{m, n} \left( \prod_i u_i \right)^n
+                 = g f^m \left( \prod_i u_i^n \right) \tau_{m, n} \\
+                &= g \left( \prod_i f u_i^n \right) \tau_{m, n}
+                 = g \left( \prod_i u_i f \right) \tau_{m, n}
+                 = u f^m \tau_{m, n} .
+            \end{align*}
+            
+        \item Take $t \in t \theory{T}$ and $u \in t^{(m)} \theory{U}$. If $t$ is a function symbol or a projection, then $t \boxtimes u$. Proceed now by induction on the height of $t$ and write $t = f ( \overrightarrow{t_i} )$, where $f \in f^{(n)} \theory{T}$, $t_i \in t \theory{T}$. Then by induction hypothesis, $t_i \boxtimes u$, and
+            \begin{align*}
+                t u^n &= f \prod_i t_i u
+                 = f \prod_i u t_i^m
+                 = u f^m \tau_{m, n} \prod_i t_i^m \\
+                &= u f^m \left( \prod_i t_i \right)^m \tau_{m, n} = u t^m \tau_{m, n} .
+            \end{align*}
+    \end{itemize}
+\end{proof}
+
+Consider $\theory{CMon}$ the algebraic theory of commutative monoids, with constant symbol $0$ and multiplication $\lambda = \lambda_2$. We shall yet again abuse notation and allow $0$ to also denote the composite $1 \stackrel{!}{\longrightarrow} 0 \stackrel{0}{\longrightarrow} 1$. Denote by $\lambda_m$ the $m$-fold multiplication term, for $m \geq 2$.
+
+Take $\theory{T}, \theory{V} \in \ob \catAA$ such that $\theory{V}$ extends $\theory{CMon}$, and consider $\theory{V} \ox \theory{T}$. Take $t \in t^{(n)} \theory{T}$, $n \geq 1$, and define its \emph{$i$-th axis}, for $1 \leq i \leq n$, by
+\[ t^{[i]} = t ( 0^{i - 1} \x \id \x 0^{n - i} ) . \]
+In other words, $t^{[i]} (x) = t (\underbrace{0, \cdots, 0}_{i - 1}, x, \underbrace{0, \cdots, 0}_{n - i})$.
+
+\begin{theorem}[Boardman--Vogt decomposition]
+	Let $t \in t^{(n)} \theory{T}$. Then
+	\[ t = \lambda_n \prod_{i=1}^n t^{[i]} . \]
+	Moreover this decomposition is unique in the following sense: if $t = \lambda_n \prod_{i=1}^n t_i$ for $t_i \in t^{(1)} (\theory{V} \ox \theory{T})$, then $t_i = t^{[i]}$.
+\end{theorem}
+\begin{proof}
+	We have
+	\begin{align*}
+		t &= t \prod_{i = 1}^n \lambda_n (0^{i - 1} \x \id \x 0^{n - i})
+		 = t \lambda_n^n \tau_{n, n} \prod_{i = 1}^n (0^{i - 1} \x \id \x 0^{n - i}) \\
+		&= \lambda_n^n t^n \prod_{i = 1}^n (0^{i - 1} \x \id \x 0^{n - i})
+		 = \lambda_n \prod_i t^{[i]} .
+	\end{align*}
+	To prove uniqueness, remark that every term $u \in t^{(n)} (\theory{V} \ox \theory{T})$ distributes over $0$, i.e. $u 0^n = 0$. Then $\forall 1 \leq k \leq n$ we have :
+	\begin{align*}
+	    \lambda_n \prod_{i=1}^n t^{[i]} &= \lambda_n \prod_{i=1}^n t_i \\
+	    \implies \underbrace{ \lambda_n \left( \prod_{i=1}^n t^{[i]} \right) (0^{k-1} \x \id \x 0^{n-k}) }_{= t^{[i]}}
+	    &= \underbrace{ \left( \lambda_n \prod_{i=1}^n t_i \right) (0^{k-1} \x \id \x 0^{n-k}) }_{= t_i} .
+	\end{align*}
+\end{proof}
+
+\begin{corollary}
+    If $\theory{U} \in \ob \catAA$ is another theory, then $\theory{V} \ox \theory{T} = \theory{V} \ox \theory{U}$ if and only if $\End_{\theory{V} \ox \theory{T}} 1 = \End_{\theory{V} \ox \theory{U}} 1$ as monoids with respect to composition. 
+\end{corollary}
+
+Consider now the case $\theory{V} = \theory{Ab}$, the theory of abelian groups, and denote by $\iota$ the unary function symbol of inversion. Define $\epsilon_1 \theory{T} = \End_{\theory{Ab} \ox \theory{T}} 1$. Take $x, y \in \epsilon_1 \theory{T}$, and define
+\begin{align*}
+    x + y     &= \lambda_2 (x \x y) \Delta_2 \\
+    - x       &= \iota x .
+\end{align*}
+Then $\epsilon_1 \theory{T}$, together with those operations and $0$ form an abelian group. Endow it further with the composition and $\id_1$, and it becomes a (unitary) ring. Moreover, if $F : \theory{T} \longrightarrow \theory{U}$ is a morphism of theories, then $\theory{Ab} \ox F : \theory{Ab} \ox \theory{T} \longrightarrow \theory{Ab} \ox \theory{U}$ induces a ring homomorphism $\epsilon_1 F : \epsilon_1 \theory{T} \longrightarrow \epsilon_1 \theory{U}$. This gives rise to a functor
+\[ \epsilon_1 : \catAA \longrightarrow \Ring . \]
+
+Take $R$ a ring, and consider $\theory{Mod}_R$ the theory of left $R$-modules, which extends $\theory{Ab}$ with a unary function symbol $r$, for each element $r \in R$, and with the appropriate axioms. It is routine verifications to show that $\theory{Mod}_R \ox \theory{Mod}_S \cong \theory{Mod}_{R \ox S}$, where $R$ and $S$ are tensored as $\bbZZ$-algebras. We will abuse notation and allow $R$ to represent its module theory $\theory{Mod}_R$. Remark that the notation $R \ox S$ leaves no ambiguity then.
+
+Returning to $\epsilon_1$, remark that $\theory{Ab} \ox \theory{T} \cong \epsilon_1 \theory{T}$, and so surprisingly enough, tensoring by $\theory{Ab}$ result in module theories.
+
+\begin{proposition}
+    The functor $\epsilon_1$ is monoidal.
+\end{proposition}
+\begin{proof}
+    Take $x \in \epsilon_1 \theory{T}$ and $y \in \epsilon_1 \theory{U}$. Then by distributivity, $x y = y x$ in $\epsilon_1 ( \theory{T} \ox \theory{U} )$. Hence, every element $t \in \epsilon_1 ( \theory{T} \ox \theory{U} )$ decomposes uniquely as $t = \sum_i x_i y_i$, where $x_i \in \epsilon_1 \theory{T}$ and $y_i \in \epsilon_1 \theory{U}$. One can show that the following map is an isomorphism :
+    \begin{align*}
+        \epsilon_1 ( \theory{T} \ox \theory{U} ) &\longrightarrow \epsilon_1 \theory{T} \ox \epsilon_1 \theory{U} \\
+        \sum_i x_i y_i &\longmapsto \sum_i x_i \ox y_i .
+    \end{align*}
+\end{proof}
+
+\begin{theorem} \label{th:eps1stab}
+    If $\theory{T}$ is syntactically stable at $k$, then the canonical ring inclusion $\tildeta_k : \epsilon_1 \theory{T}^{\ox k} \longincl \epsilon_1 \theory{T}^{\ox k+1}$ is an isomorphism. In particular, $| \epsilon_1 \theory{T} | \leq | \theory{T} |$.
+\end{theorem}
+
+\section{First results about the (un)stability of classical algebraic theories}
+
+\begin{center} \begin{tabular}{|c|c|c|c|}
+\hline
+    $\theory{T}$ & $\Vert \theory{T} \Vert_{\Set}$ & $\vert \theory{T} \vert$ & $\epsilon_1 \theory{T}$ \\
+\hline \hline
+    $\theory{Mag}_0$   & $1$        & $1$      & $\bbZZ$     \\
+\hline
+    $\theory{Mag}_1$   & $\infty$ & $\infty$ & $\bbZZ [X]$ \\
+\hline
+    $\theory{Mag}_n, n \geq 1$  & ?  & $\infty$ & $\bbZZ \langle X_1, \ldots, X_n \rangle$ \\
+\hline
+    $\theory{CMag}_n, n \geq 1$ & ?  & $\infty$ & $\bbZZ [X]$ \\
+\hline
+    $\theory{SGrp}$    & ?        & $\infty$ & $\frac{\bbZZ [X, Y]}{\langle X(X-1), Y(Y-1) \rangle}$ \\
+\hline
+    $\theory{CSGrp}$   & ?        & $\infty$ & $\frac{\bbZZ [X]}{\langle X(X-1) \rangle}$ \\
+\hline
+    $\theory{Mon}$     & $2$      & $2$      & $\bbZZ$     \\
+\hline
+    $\theory{CMon}$    & $1$      & $1$      & $\bbZZ$     \\
+\hline
+    $\theory{Grp}$     & $2$      & $2$      & $\bbZZ$     \\
+\hline
+    $\theory{Ab}$      & $1$      & $1$      & $\bbZZ$     \\
+\hline
+    $\theory{Mod}_R$   & ?        & (*)      & $R$         \\
+\hline
+    $\theory{Alg}_R$   & $2$      & $2$      & $R$         \\
+\hline
+\end{tabular} \end{center}
+where (*) means the number depends on the ring $R$.
+
+For the rest of this section, let $\lambda$, $\iota$ and $0$ be respectively the (binary) multiplication, inversion and unit of $\theory{Ab}$.
+
+\paragraph*{$\theory{Mon}$, $\theory{CMon}$, $\theory{Grp}$, and $\theory{Ab}$.} Take $\theory{T}$ to be one of those theories. By the Heckmann--Hilton argument, $\theory{Ab} \ox \theory{T} = \theory{Ab}$. We then have an isomorphism $\epsilon_1 \theory{T} \xrightarrow{\cong} \bbZZ$ mapping $\id$ to $1$.
+
+\paragraph*{$\theory{Mag}_0$.} Let $c$ be the unique constant symbol of $\theory{Mag}_0$. In $\theory{Ab} \ox \theory{Mag}_0$ we have $c = 0$ since $c \boxtimes 0$. Hence $\theory{Ab} \ox \theory{Mag}_0 = \theory{Ab}$ and $\epsilon_1 \theory{Mag}_0 = \bbZZ$.
+
+Then, in $\theory{Mag}_0^{\ox k}$ with $k \geq 1$, all constant symbols are equal, so $\theory{Mag}_0^{\ox k} = \theory{Mag}_0$ and $| \theory{Mag}_0 | = \Vert \theory{Mag}_0 \Vert = 1$.
+
+\paragraph*{$\theory{Mag}_n$, with $n \geq 1$.} For $f$ the unique $n$-ary function symbol of $\theory{Mag}_1$ we have a ring isomorphism
+\begin{align*}
+	\epsilon_1 \theory{Mag}_n &\longrightarrow \bbZZ \langle X_1, \ldots, X_n \rangle \\
+	\id &\longmapsto 1 \\
+	f^{[i]} &\longmapsto X_i & 1 \leq i \leq n .
+\end{align*}
+
+\paragraph*{$\theory{CMag}_n$, with $n \geq 1$.} For $\sigma \in \frakSS_n$ we have $f = f \sigma$, so in term of axes
+\[ \lambda_n \prod_i f^{[i]} = \lambda_n \prod_i f^{[\sigma (i)]}, \quad \forall \sigma \in \frakSS_n . \]
+By uniqueness of axes, $f^{[i]} = f^{[j]}$, $\forall i, j$, and so $\epsilon_1 \theory{CMag}_n \cong \bbZZ [X]$.
+
+\paragraph*{$\theory{SGrp}$.} Let $m$ be the binary multiplication symbol of $\theory{SGrp}$. Since $m \boxtimes 0$ we have $m (0 \x 0) = 0$. This theory extends $\theory{Mag}_2$ only by the associativity axiom $m (m \x \id) = m (\id \x m)$. In term of axes we have
+\begin{center} \begin{tabular}{|c|c|c|}
+\hline
+	Axis & $m (m \x \id)$ & $m (\id \x m)$ \\
+\hline \hline
+	$1$  & $m^{[1]} m^{[1]}$ & $m^{[1]}$ \\
+\hline
+	$2$  & $m^{[1]} m^{[2]}$ & $m^{[2]} m^{[1]}$ \\
+\hline
+	$3$  & $m^{[2]}$ & $m^{[2]} m^{[2]}$ \\
+\hline
+\end{tabular} \end{center}
+Hence,
+\begin{align*}
+	\epsilon_1 \theory{SGrp} &= \frac{\epsilon_1 \theory{Mag}_n}{\langle m^{[1]} (m^{[1]} - 1), m^{[2]} (m^{[2]} - 1), m^{[1]} m^{[2]} - m^{[2]} m^{[1]} \rangle} \\
+	&= \frac{\bbZZ [X, Y]}{\langle X(X-1), Y(Y-1)\rangle} .
+\end{align*}
+
+\paragraph*{$\theory{CSGrp}$.} This theory extends $\theory{SGrp}$ only by the symmetry axiom, so
+\[ \epsilon_1 \theory{CSGrp} = \frac{\bbZZ [X]}{\langle X(X-1) \rangle} . \]
+
+\paragraph*{$\theory{Mod}_R$.} Let $a$, $i$ and $o$ be respectively the addition, inversion and zero of $\theory{Mod}_R$. By the Heckmann-Hilton argument, $\lambda = a$, $\iota = i$ and $0 = o$ in $\theory{Ab} \ox \theory{Mod}_R$. Let $f_r$ be the $r$-action unary function symbol, for $r \in R$. In $\theory{Mod}_R$, $f_r$ already distributes over $a$, $i$ and $o$, so tensoring with $\theory{Ab}$ doesn't change the underlying $\theory{Mod}_R$, and $\epsilon_1 \theory{Mod}_R = R$.
+
+For the syntactical rank, remark that $\theory{Mod}_R^{\ox k+1} = \theory{Mod}_R^{\ox k} \iff R^{\ox k+1} = R^{\ox k}$.
+
+\paragraph*{$\theory{Alg}_R$.} This theory extends $\theory{Mod}_R$ only by the multiplication $m$, the one $l$ and the related axioms. Then in $\theory{Ab} \ox \theory{Alg}_R$, $o = 0 = l$ by distributivity. Then,
+\[ m^{[1]} = m (\id \x 0) = m (\id \x o) = o, \]
+and similarly for $m^{[2]}$. Hence $\theory{Ab} \ox \theory{Alg}_R = \theory{Mod}_R$ and $\epsilon_1 \theory{Alg}_R = R$.
+
+Consider now $\theory{Alg}_R^{\ox k}$ with $k \geq 2$. There, all constants are equal, all additions are equal (by Heckmann-Hilton), and all multiplications are identically $o$, so equal as well. Hence $| \theory{Alg}_R | = 2$. Furthermore, for $k \geq 2$, models of $\theory{Alg}_R^{\ox k}$ are such that the additive and multiplicative units are equal, which only allows for the trivial model, and $\Vert \theory{Alg}_R \Vert = 2$.
+
+
+\nocite{*}
+\bibliographystyle{alpha}
+\bibliography{bibliography}
+
+\end{document}
