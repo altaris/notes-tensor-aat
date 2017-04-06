@@ -1,12 +1,11 @@
 \documentclass[a4paper, 12pt]{article}
 
-\usepackage[cortana,
-			langage = english,
+\usepackage[durotan,
 			chapterStyle = cb,
 			scriptStyle = rsfs,
 			+maths,
-			maths.scriptCategories,
-			+tikz]{kappak}
+			+tikz
+]{kappak}
 \usepackage{bbm, mathtools, stmaryrd}
 
 \diagramsize{2}{3}
@@ -37,7 +36,7 @@ We now create a category that describe $\theory{T}$. The first step is to descri
 
 Each term $t \in t^{(n)} \theory{T}$ defines a morphism $t : n \longrightarrow 1$. Define $\sim$ to be the smallest congruence relation on $\frakLL$ such that $t = u$ in $\catLL / \sim$ whenever there is an axiom $\phi \in T$ of the form $\phi = [t = u]$. We abuse notations and denote by $\theory{T}$ the quotient category.
 
-Let $\catAA$ be the category of algebraic theories and finite product preserving functors that are identity on objects, i.e. a morphism $F : \theory{T} \longrightarrow \theory{U}$ is a product preserving functor such that the follwing diagram commutes : \trianglediagramarrows{c->}{c->}{}
+Let $\catAA$ be the category of algebraic theories and finite product preserving functors that are identity on objects, i.e. a morphism $F : \theory{T} \longrightarrow \theory{U}$ is a product preserving functor such that the follwing diagram commutes : \diagramarrows{c->}{c->}{}{}
 \[ \triangleUdiagram{\bbNN^\op}{\theory{T}}{\theory{U} .}{}{}{F} \]
 
 \subsection{Structure of $\theory{T} ( \catCC )$}
@@ -186,7 +185,7 @@ The theory $\theory{T}$ is said \emph{syntactically stable} at $k \in \bbNN$ if 
     If $\theory{T}$ is syntactically (resp. semantically) stable at $k$, then it remains so at $k + 1$.
 \end{proposition}
 \begin{proof}
-    Remark that the following diagram commute : \squarediagramlines{}{=}{=}{} \squarediagramarrows{}{-}{-}{}
+    Remark that the following diagram commute : \diagramlines{}{=}{=}{} \diagramarrows{}{-}{-}{}
     \[ \squarediagram{\theory{T}^{\ox k+1}}{\theory{T}^{\ox k+2}}{\theory{T} \ox \theory{T}^{\ox k}}{\theory{T} \ox \theory{T}^{\ox k+1} ,}{\eta_{k+1}}{}{}{\theory{T} \ox \eta_k} 
     \qquad
     \begin{tikzpicture}[inline/.style = {fill = white, inner sep = 2.5pt}]
